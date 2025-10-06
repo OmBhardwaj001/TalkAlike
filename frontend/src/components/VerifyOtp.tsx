@@ -36,8 +36,6 @@ const VerifyOtp = () => {
     newOtp[index] = value;
     setOtp(newOtp);
     setError("")
-    console.log("otp",otp)
-    console.log("new opt ", newOtp);
 
     if(value && index < 5){
       inputRefs.current[index+1]?.focus();
@@ -135,6 +133,7 @@ const VerifyOtp = () => {
               {
                 otp.map((digit,index)=>(
                   <input
+                  id='email'
                   key={index}
                   ref={(el: HTMLInputElement | null) => {inputRefs.current[index] = el}}
                   type='text'
