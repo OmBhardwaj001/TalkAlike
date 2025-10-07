@@ -1,32 +1,51 @@
 "use client"
 import { ArrowBigRight, Loader2, Mail } from 'lucide-react'
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import axios from 'axios'
+import { useAppData, user_service } from '@/context/AppContext'
+import Loading from '@/components/Loading'
+import toast from 'react-hot-toast'
 
 const LoginPage = () => {
+
+  const {isAuth, loading : userLoading} = useAppData();
+
   const [email,setEmail] = useState<string>("");
   const [loading,setLoading] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(()=>{
+  if(isAuth){
+    router.push("/chat")
+  }
+  },[isAuth])
 
   const handleSubmit = async(e :React.FormEvent<HTMLElement>) : Promise<void>=>{
     e.preventDefault();
     setLoading(true);
 
     try {
-      const {data} = await axios.post(`http://localhost:5000/api/v1/login`,{
+      const {data} = await axios.post(`${user_service}/api/v1/login`,{
         email,
       })
 
-      alert(data.message)
+      toast.success(data.message)
       router.push(`/verify?email=${email}`)
       
     } catch (error : any) {
-      alert(error.response.data.message)
+      if (error.response && error.response.data && error.response.data.message) {
+    toast.error(error.response.data.message);
+  } else {
+    toast.error(error.message || "Something went wrong");
+  }
     }finally{
       setLoading(false);
     }
   }
+
+  if(userLoading || isAuth) return <Loading/>
+
 
   return(
    <div className='min-h-screen bg-gray-900 flex items-center justify-center'>
