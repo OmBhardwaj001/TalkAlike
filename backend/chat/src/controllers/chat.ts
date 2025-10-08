@@ -48,7 +48,7 @@ export const getAllChats = TryCatch(async(req:AuthenticatedRequest,res)=>{
                 seen:false,
             });
             try {
-                const {data} = await axios.get(`${process.env.USER_SERVICE}/api/v1/user${otherUserId}`);
+                const {data} = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${otherUserId}`);
 
                 return{
                     user:data,
@@ -226,7 +226,7 @@ export const getMessageByChat = TryCatch(async(req:AuthenticatedRequest,res)=>{
     const otherUserId = chat.users.find((id) => id !== userId)
 
     try {
-        const {data} = await axios.get(`${process.env.USER_SERVICE}/api/v1/user${otherUserId}`);
+        const {data} = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${otherUserId}`);
 
         if(!otherUserId){
             res.status(403).json({message:"you are not a participant of this chat"});
