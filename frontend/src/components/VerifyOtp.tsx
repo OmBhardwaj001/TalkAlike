@@ -1,13 +1,18 @@
 "use client";
-import {Lock,Loader2,ArrowBigRight} from 'lucide-react';
+import {Lock,Loader2,ArrowBigRight, ArrowLeft} from 'lucide-react';
 import {useSearchParams,useRouter} from 'next/navigation'
 import react,{useState,useRef,useEffect} from 'react'
 import { clearInterval, setInterval } from 'timers';
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import { useAppData, user_service } from '@/context/AppContext';
+import Loading from './Loading';
+import toast from 'react-hot-toast';
 
 
 const VerifyOtp = () => {
+
+  const {isAuth, setIsAuth, setUser, loading : userLoading , fetchChats, fetchUsers} = useAppData();
 
   const [loading , setLoading ] = useState<boolean>(false);
   const [otp, setOtp] = useState<string[]>(["","","","","",""]);
@@ -29,6 +34,14 @@ const VerifyOtp = () => {
       return()=> clearInterval(interval);
     }
   },[timer]);
+
+  console.log(isAuth);
+ 
+  useEffect(()=>{
+    if(isAuth){
+      router.push("/chat")
+    }
+  },[isAuth])
 
   const handleInputChange = (index: number , value:string) : void =>{
     if(value.length > 1) return;
@@ -71,12 +84,12 @@ const VerifyOtp = () => {
     setLoading(true);
 
     try {
-      const {data} = await axios.post(`http://localhost:5000/api/v1/verify`,{
+      const {data} = await axios.post(`${user_service}/api/v1/verify`,{
         email,
         otp:otpString,
       });
 
-      alert(data.message)
+      toast.success(data.message)
       Cookies.set("token",data.token,{
         expires:15,
         secure:false,
@@ -85,6 +98,10 @@ const VerifyOtp = () => {
 
       setOtp(["","","","","",""]);
       inputRefs.current[0]?.focus();
+      setUser(data.user);
+      setIsAuth(true);
+      fetchChats();
+      fetchUsers();
     } catch (error : any) {
       setError(error.response.data.message)
     }
@@ -97,26 +114,29 @@ const VerifyOtp = () => {
     setResendLoading(true);
     setError("");
     try {
-      const {data} = await axios.post(`http://localhost:5000/api/v1/login`,{
+      const {data} = await axios.post(`${user_service}/api/v1/login`,{
         email,
       });
 
-      alert(data.message);
+      toast.success(data.message);
       setTimer(60);
       
     } catch (error : any) {
-      setError(error.response.data.message)
+      toast.error(error.response.data.message)
     }
     finally{
       setResendLoading(false);
     }
   }
 
+  if(userLoading || isAuth) return <Loading/>
+
   return(
     <div className='min-h-screen bg-gray-900 flex items-center justify-center'>
     <div className='max-w-md w-full'>
       <div className='bg-gray-800 border border-gray-700 rounded-lg p-8'>
-        <div className='text-center mb-8'>
+        <div className='text-center mb-8 relative'>
+          <button className='absolute top-0 left-0  text-gray-500 hover:text-white' onClick={()=> router.push("/login")}><ArrowLeft className='w-6 h-6'/></button>
           <div className='mx-auto w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center mb-6'>
             <Lock size={40} className='text-white'/>
           </div>
