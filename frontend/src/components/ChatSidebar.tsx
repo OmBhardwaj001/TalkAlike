@@ -25,6 +25,7 @@ interface ChatSidebarProps {
   setSelectedUser: (userId: string | null) => void;
   handleLogout: () => void;
   createChat: (user: User) => void;
+  onlineUsers: string[];
 }
 
 const ChatSidebar = ({
@@ -39,6 +40,7 @@ const ChatSidebar = ({
   setSelectedUser,
   handleLogout,
   createChat,
+  onlineUsers
 }: ChatSidebarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   return (
@@ -113,12 +115,21 @@ const ChatSidebar = ({
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <UserCircle className="h-6 w-6 text-gray-300" />
+                         {
+                        onlineUsers.includes(u._id) && (
+                          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900 ">
+                          </span>
+                        )
+                      }
                       </div>
-                      {/* {online user symbol} */}
+
                       <div className="flex-1 min-w-0">
                         <span className="font-medium text-white">{u.name}</span>
                         <div className="text-xs text-gray-400 mt-0.5 ">
                           {/*to show online offline text */}
+                          {
+                            onlineUsers.includes(u._id) ? "Online" : "Offline"
+                          }
                         </div>
                       </div>
                     </div>
@@ -153,6 +164,12 @@ const ChatSidebar = ({
                         <UserCircle className="w-7 h-7 text-gray-300" />
                         {/* {online user ka work hai} */}
                       </div>
+                      {
+                        onlineUsers.includes(chat.user._id) && (
+                          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900 ">
+                          </span>
+                        )
+                      }
                     </div>
                     <div className="flex-1 min-w-0 ">
                       <div className="flex items-center justify-between py-2  mb-1">
