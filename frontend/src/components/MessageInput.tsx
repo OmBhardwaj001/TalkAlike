@@ -5,6 +5,7 @@ interface MessageInputProps {
   message: string;
   setmessage: (message: string) => void;
   handleMessageSend: (e: any, imageFile: File | null) => void;
+  handleTyping:(value:string) => void;
 }
 
 const MessageInput = ({
@@ -12,6 +13,7 @@ const MessageInput = ({
   message,
   setmessage,
   handleMessageSend,
+  handleTyping
 }: MessageInputProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -69,7 +71,7 @@ const MessageInput = ({
           className="flex-1 bg-gray-700 rounded-lg px-4 py-2 text-white placeholder:gray-400"
           placeholder={imageFile ? "Add a caption" : "type a message"}
           value={message}
-          onChange={(e) => setmessage(e.target.value)}
+          onChange={(e) => handleTyping(e.target.value)}
         />
         <button
           type="submit"
