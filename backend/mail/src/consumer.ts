@@ -27,8 +27,9 @@ export const startSendOtpConsumer = async()=>{
                     const {to,subject,body} = JSON.parse(msg.content.toString());
 
                     const transporter = nodemailer.createTransport({
-                        host:"smtp.gmail.com",
-                        port:465,
+                        host:"smtp.resend.com",
+                        port:587,
+                        secure:false,
                         auth:{
                             user:process.env.USER,
                             pass:process.env.PASSWORD,
@@ -36,7 +37,7 @@ export const startSendOtpConsumer = async()=>{
                     });
 
                     await transporter.sendMail({
-                        from:"chat app",
+                        from:"TalkAlike <noreply@cryptdrive.in>",
                         to,
                         subject,
                         text:body
