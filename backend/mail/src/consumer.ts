@@ -31,8 +31,8 @@ export const startSendOtpConsumer = async()=>{
                         port:587,
                         secure:false,
                         auth:{
-                            user:process.env.USER,
-                            pass:process.env.PASSWORD,
+                            user:"resend",
+                            pass:process.env.RESEND_API_KEY,
                         }
                     });
 
