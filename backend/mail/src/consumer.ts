@@ -2,6 +2,8 @@ import amqp from 'amqplib';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
+dotenv.config();
+
 export const startSendOtpConsumer = async()=>{
     try {
 
@@ -31,8 +33,8 @@ export const startSendOtpConsumer = async()=>{
                         port:587,
                         secure:false,
                         auth:{
-                            user:process.env.USER,
-                            pass:process.env.PASSWORD,
+                            user:process.env.SMTP_USER,
+                            pass:process.env.SMTP_PASSWORD,
                         }
                     });
 
