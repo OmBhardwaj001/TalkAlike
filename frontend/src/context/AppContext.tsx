@@ -5,8 +5,8 @@ import Cookies from 'js-cookie';
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast';
 
-export const user_service = "http://localhost:5000"; 
-export const chat_service = "http://localhost:5002";
+export const user_service = "http://13.200.227.111:5000"; 
+export const chat_service = "http://13.200.227.111:5002";
 
 export interface User{
     _id:string;

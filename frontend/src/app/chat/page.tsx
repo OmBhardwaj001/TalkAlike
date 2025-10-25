@@ -223,7 +223,7 @@ const ChatApp = () => {
 
       setmessage("");
 
-      const displayText = imageFile ? "📷 image" : MessageInput;
+      const displayText = imageFile ? "📷 image" : message.trim();
       moveChatToTop(
         selectedUser!,
         {
